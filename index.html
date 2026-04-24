@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>医生版 DRTI 测试</title>
+  <meta name="description" content="测试你在医院里是哪种生物。20 道单选题，基于临床与科研场景。" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🩺</text></svg>" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- 首页 -->
+    <section id="page-intro" class="page active">
+      <div class="card intro-card">
+        <h1 class="intro-title">医生版 DRTI 测试</h1>
+        <p class="intro-subtitle">测试你在医院里是哪种生物</p>
+        <button id="btn-start" class="btn btn-primary">开始测试</button>
+        <p class="intro-note">20 题 · 约 3 分钟 · 仅供娱乐</p>
+      </div>
+    </section>
+
+    <!-- 答题页 -->
+    <section id="page-quiz" class="page">
+      <div class="card quiz-card">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0 / 20</div>
+        <div class="question-area">
+          <p class="question-text" id="question-text"></p>
+        </div>
+        <div class="options" id="options"></div>
+      </div>
+    </section>
+
+    <!-- 结果页 -->
+    <section id="page-result" class="page">
+      <div class="card result-card" id="result-card">
+        <div class="result-image-frame">
+          <div class="result-image-inner">
+            <img class="result-image" id="result-image" src="" alt="" />
+          </div>
+        </div>
+        <div class="result-kicker">你的主类型</div>
+        <div class="result-name-row">
+          <span class="result-name" id="result-name"></span>
+          <span class="result-badge" id="result-badge"></span>
+        </div>
+        <div class="result-code" id="result-code"></div>
+        <div class="result-desc" id="result-desc"></div>
+
+        <h3 class="section-title">四维评分</h3>
+        <div class="axis-bars" id="axis-bars"></div>
+
+        <div class="result-next-step" id="result-next-step"></div>
+
+        <div class="qr-promo">
+          <img class="qr-code" src="/pic/download.jpg" alt="医渡智循下载二维码" />
+          <p class="qr-tagline">医渡质循，专为临床医生、医学研究者打造的医学循证 AI 助手<br>扫描下载，医生认证获取免费半年VIP额度</p>
+        </div>
+
+        <div class="disclaimer" id="disclaimer"></div>
+
+        <div class="result-actions">
+          <button id="btn-share" class="btn btn-primary">分享此测试</button>
+          <button id="btn-download" class="btn btn-secondary">保存分享图片</button>
+          <button id="btn-restart" class="btn btn-secondary">重新测试</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

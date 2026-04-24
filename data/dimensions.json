@@ -1,0 +1,9 @@
+{
+  "axes": [
+    { "key": "RC", "left": "R", "right": "C", "leftLabel": "研究思维", "rightLabel": "临床思维" },
+    { "key": "SI", "left": "S", "right": "I", "leftLabel": "慢性子", "rightLabel": "急性子" },
+    { "key": "BH", "left": "B", "right": "H", "leftLabel": "佛系", "rightLabel": "奋斗" },
+    { "key": "GW", "left": "G", "right": "W", "leftLabel": "规范型", "rightLabel": "经验型" }
+  ],
+  "order": ["RC", "SI", "BH", "GW"]
+}

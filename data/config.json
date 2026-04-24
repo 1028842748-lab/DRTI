@@ -1,0 +1,10 @@
+{
+  "scoring": {
+    "threshold": 0
+  },
+  "display": {
+    "title": "医生版 DRTI 测试",
+    "subtitle": "测试你在医院里是哪种生物",
+    "funNote": "本测试仅供娱乐，结果不代表任何专业评估。"
+  }
+}
