@@ -193,10 +193,72 @@ export async function generateShareImage(type, axisScores, axes) {
   ctx.fillStyle = '#aaa'
   ctx.fillText('本测试仅供娱乐，结果不代表任何专业评估。', W / 2, y + 22)
 
-  const link = document.createElement('a')
-  link.download = `DRTI-${type.code}.png`
-  link.href = canvas.toDataURL('image/png')
-  link.click()
+  const dataUrl = canvas.toDataURL('image/png')
+  showShareOverlay(dataUrl)
+}
+
+function showShareOverlay(dataUrl) {
+  let overlay = document.getElementById('share-overlay')
+  if (overlay) overlay.remove()
+
+  overlay = document.createElement('div')
+  overlay.id = 'share-overlay'
+  Object.assign(overlay.style, {
+    position: 'fixed',
+    inset: '0',
+    zIndex: '9999',
+    background: 'rgba(0,0,0,0.85)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '24px',
+    overflowY: 'auto',
+    WebkitOverflowScrolling: 'touch',
+  })
+
+  const tip = document.createElement('p')
+  Object.assign(tip.style, {
+    color: '#fff',
+    fontSize: '15px',
+    marginBottom: '16px',
+    textAlign: 'center',
+    flexShrink: '0',
+  })
+  tip.textContent = '长按图片保存到相册'
+
+  const img = document.createElement('img')
+  img.src = dataUrl
+  Object.assign(img.style, {
+    maxWidth: '92%',
+    maxHeight: '75vh',
+    borderRadius: '12px',
+    boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+  })
+
+  const closeBtn = document.createElement('button')
+  Object.assign(closeBtn.style, {
+    marginTop: '20px',
+    padding: '10px 32px',
+    border: 'none',
+    borderRadius: '8px',
+    background: 'rgba(255,255,255,0.15)',
+    color: '#fff',
+    fontSize: '15px',
+    cursor: 'pointer',
+    flexShrink: '0',
+  })
+  closeBtn.textContent = '关闭'
+  closeBtn.addEventListener('click', () => overlay.remove())
+
+  overlay.appendChild(tip)
+  overlay.appendChild(img)
+  overlay.appendChild(closeBtn)
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove()
+  })
+
+  document.body.appendChild(overlay)
 }
 
 function splitParagraph(text) {
