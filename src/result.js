@@ -47,7 +47,7 @@ export function renderResult(type, axisScores, dimensions, config) {
   barsEl.innerHTML = ''
   for (const axis of dimensions.axes) {
     const score = axisScores[axis.key] || 0
-    const pct = ((score + 10) / 20) * 100
+    const pct = ((score + 4) / 8) * 100
 
     const row = document.createElement('div')
     row.className = 'axis-row'

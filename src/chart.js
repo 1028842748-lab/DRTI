@@ -70,7 +70,7 @@ export function drawRadar(canvas, axisScores, axes, palette) {
 
   const values = axes.map((a) => {
     const score = axisScores[a.key] || 0
-    return (score + 10) / 20
+    return (score + 4) / 8
   })
 
   ctx.beginPath()

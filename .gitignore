@@ -4,3 +4,7 @@ dist/
 *.local
 .claude/
 .gstack/
+.playwright-mcp/
+SBTI-main/
+result-*.png
+verify-*.png

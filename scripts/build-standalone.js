@@ -54,7 +54,7 @@ const html = `<!DOCTYPE html>
   --font: 'PingFang HK', 'PingFang SC', system-ui, -apple-system, 'Segoe UI', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   --max-width: 640px;
 }
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100dvh; }
 #app { max-width: var(--max-width); margin: 0 auto; padding: 16px; min-height: 100dvh; display: flex; align-items: center; justify-content: center; }
 .page { display: none; width: 100%; }
@@ -73,7 +73,10 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 .btn-secondary:hover { background: var(--border); }
 .btn-option { display: block; width: 100%; text-align: left; padding: 14px 18px; margin-bottom: 10px; background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; font-weight: 400; line-height: 1.5; font-family: var(--font); }
 .btn-option:hover { border-color: var(--accent); background: var(--accent-light); }
-.btn-option:active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-option--selected, .btn-option--selected:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-back { display: block; margin-top: 12px; padding: 6px 2px; background: none; border: none; color: var(--text-secondary); font-size: 0.85rem; font-family: var(--font); cursor: pointer; transition: color 0.2s; }
+.btn-back:hover { color: var(--accent); }
+.btn-back[hidden] { display: none; }
 .quiz-card { padding: 24px 20px; }
 .progress-bar { height: 4px; background: var(--accent-light); border-radius: 2px; overflow: hidden; margin-bottom: 8px; }
 .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; width: 0%; }
@@ -127,9 +130,10 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
     <section id="page-quiz" class="page">
       <div class="card quiz-card">
         <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-        <div class="progress-text" id="progress-text">0 / 20</div>
+        <div class="progress-text" id="progress-text">1 / 20</div>
         <div class="question-area"><p class="question-text" id="question-text"></p></div>
         <div id="options"></div>
+        <button id="btn-back" class="btn-back" hidden>← 上一题</button>
       </div>
     </section>
 
@@ -174,9 +178,12 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
     }
 
     /* -- state -- */
+    var ADVANCE_DELAY = 150;
     var queue = [];
     var current = 0;
     var answers = {};
+    var selectedKeys = {};
+    var locked = false;
     var lastType = null;
     var lastAxisScores = null;
 
@@ -189,8 +196,15 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
       fill: document.getElementById('progress-fill'),
       text: document.getElementById('progress-text'),
       qText: document.getElementById('question-text'),
-      options: document.getElementById('options')
+      options: document.getElementById('options'),
+      back: document.getElementById('btn-back')
     };
+
+    els.back.addEventListener('click', function() {
+      if (locked || current === 0) return;
+      current--;
+      renderQuestion();
+    });
 
     function showPage(name) {
       for (var k in pages) pages[k].classList.remove('active');
@@ -200,25 +214,41 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 
     /* -- quiz -- */
     function renderQuestion() {
+      locked = false;
       var q = queue[current];
       els.qText.textContent = q.text;
       els.options.innerHTML = '';
-      var pct = (current / queue.length) * 100;
+      var step = current + 1;
+      var pct = (step / queue.length) * 100;
       els.fill.style.width = pct + '%';
-      els.text.textContent = current + ' / ' + queue.length;
+      els.text.textContent = step + ' / ' + queue.length;
+      els.back.hidden = current === 0;
 
+      var prevKey = selectedKeys[q.id];
       q.options.forEach(function(opt) {
         var btn = document.createElement('button');
         btn.className = 'btn btn-option';
         btn.textContent = opt.text;
+        if (prevKey === opt.key) btn.classList.add('btn-option--selected');
         btn.addEventListener('click', function() {
+          if (locked) return;
+          locked = true;
+          var sel = els.options.querySelectorAll('.btn-option--selected');
+          for (var i = 0; i < sel.length; i++) sel[i].classList.remove('btn-option--selected');
+          btn.classList.add('btn-option--selected');
+          if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
           answers[q.id] = opt.score;
-          current++;
-          if (current >= queue.length) {
-            onComplete();
-          } else {
-            renderQuestion();
-          }
+          selectedKeys[q.id] = opt.key;
+          setTimeout(function() {
+            current++;
+            if (current >= queue.length) {
+              els.fill.style.width = '100%';
+              els.text.textContent = queue.length + ' / ' + queue.length;
+              onComplete();
+            } else {
+              renderQuestion();
+            }
+          }, ADVANCE_DELAY);
         });
         els.options.appendChild(btn);
       });
@@ -228,6 +258,8 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
       queue = shuffle(QUESTIONS);
       current = 0;
       answers = {};
+      selectedKeys = {};
+      locked = false;
       renderQuestion();
       showPage('quiz');
     }
