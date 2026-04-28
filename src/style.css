@@ -145,16 +145,25 @@ body {
   line-height: 1.5;
 }
 
-.btn-option:hover {
-  border-color: var(--accent);
-  background: var(--accent-light);
+@media (hover: hover) {
+  .btn-option:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
 }
 
-.btn-option--selected,
-.btn-option--selected:hover {
+.btn-option--selected {
   background: var(--accent);
   color: #fff;
   border-color: var(--accent);
+}
+
+@media (hover: hover) {
+  .btn-option--selected:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
 }
 
 .btn-back {

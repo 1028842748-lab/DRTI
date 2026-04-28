@@ -68,7 +68,19 @@ export function renderResult(type, axisScores, dimensions, config) {
 
   document.getElementById('disclaimer').textContent = config.display.funNote
 
-  document.getElementById('btn-download').onclick = () => {
-    generateShareImage(type, axisScores, dimensions.axes)
+  document.getElementById('btn-download').onclick = async (e) => {
+    const btn = e.currentTarget
+    const original = btn.textContent
+    btn.textContent = '生成中…'
+    btn.disabled = true
+    try {
+      await generateShareImage(type, axisScores, dimensions.axes)
+    } catch (err) {
+      console.error('generateShareImage failed:', err)
+      alert('生成图片失败：' + (err?.message || err))
+    } finally {
+      btn.textContent = original
+      btn.disabled = false
+    }
   }
 }
