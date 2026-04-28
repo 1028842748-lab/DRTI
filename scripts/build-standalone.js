@@ -342,15 +342,18 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
     document.getElementById('btn-start').addEventListener('click', startQuiz);
     document.getElementById('btn-restart').addEventListener('click', startQuiz);
     document.getElementById('btn-share').addEventListener('click', async function() {
-      var url = window.location.href;
+      var isWebUrl = /^https?:$/.test(window.location.protocol);
+      var url = isWebUrl
+        ? (window.location.origin + window.location.pathname)
+        : 'https://github.com/1028842748-lab/DRTI';
       var text = '我刚测了一个医生版 DRTI，测你在医院里是哪种生物。你也来试试。';
       if (navigator.share) {
         try { await navigator.share({ title: '${config.display.title}', text: text, url: url }); return; } catch(_) {}
       }
-      try { await navigator.clipboard.writeText(url); } catch(_) {}
+      try { await navigator.clipboard.writeText(text + '\\n' + url); } catch(_) {}
       var btn = document.getElementById('btn-share');
-      btn.textContent = '链接已复制';
-      setTimeout(function() { btn.textContent = '分享此测试'; }, 2000);
+      btn.textContent = '已复制，去粘贴分享吧';
+      setTimeout(function() { btn.textContent = '分享此测试'; }, 2500);
     });
 
     /* -- share image -- */

@@ -64,7 +64,10 @@ async function init() {
   })
 
   document.getElementById('btn-share').addEventListener('click', async () => {
-    const url = window.location.origin + window.location.pathname
+    const isWebUrl = /^https?:$/.test(window.location.protocol)
+    const url = isWebUrl
+      ? window.location.origin + window.location.pathname
+      : 'https://github.com/1028842748-lab/DRTI'
     const text = '我刚测了一个医生版 DRTI，测你在医院里是哪种生物。你也来试试。'
     if (navigator.share) {
       try {
@@ -72,10 +75,12 @@ async function init() {
         return
       } catch (_) {}
     }
-    await navigator.clipboard.writeText(url)
+    try {
+      await navigator.clipboard.writeText(text + '\n' + url)
+    } catch (_) {}
     const btn = document.getElementById('btn-share')
-    btn.textContent = '链接已复制'
-    setTimeout(() => { btn.textContent = '分享此测试' }, 2000)
+    btn.textContent = '已复制，去粘贴分享吧'
+    setTimeout(() => { btn.textContent = '分享此测试' }, 2500)
   })
 }
 
