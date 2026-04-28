@@ -1,6 +1,6 @@
 /**
  * [INPUT]: data/*.json + public/pic/*.png
- * [OUTPUT]: drti-v2-standalone.html
+ * [OUTPUT]: drti-v3-standalone.html
  * [POS]: 打包脚本 — 按 v2 UI 生成可直接 drop 的单文件 HTML
  * [PROTOCOL]: 只读不改，所有资源内联
  */
@@ -547,7 +547,7 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 </html>
 `
 
-const out = resolve(ROOT, 'drti-v2-standalone.html')
+const out = resolve(ROOT, 'drti-v3-standalone.html')
 writeFileSync(out, html, 'utf8')
 const sizeMB = (html.length / 1024 / 1024).toFixed(2)
 console.log('Built: ' + out)
