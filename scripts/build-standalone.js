@@ -124,14 +124,14 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
         <h1 class="intro-title">${config.display.title}</h1>
         <p class="intro-subtitle">${config.display.subtitle}</p>
         <button id="btn-start" class="btn btn-primary">开始测试</button>
-        <p class="intro-note">20 题 · 约 3 分钟 · 仅供娱乐</p>
+        <p class="intro-note">16 题 · 约 2 分钟 · 仅供娱乐</p>
       </div>
     </section>
 
     <section id="page-quiz" class="page">
       <div class="card quiz-card">
         <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-        <div class="progress-text" id="progress-text">1 / 20</div>
+        <div class="progress-text" id="progress-text">1 / 16</div>
         <div class="question-area"><p class="question-text" id="question-text"></p></div>
         <div id="options"></div>
         <button id="btn-back" class="btn-back" hidden>← 上一题</button>
@@ -537,10 +537,58 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
       ctx.font = '400 12px ' + font; ctx.fillStyle = '#aaa';
       ctx.fillText('本测试仅供娱乐，结果不代表任何专业评估。', W / 2, y + 22);
 
-      var link = document.createElement('a');
-      link.download = 'DRTI-' + type.code + '.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      var dataUrl = canvas.toDataURL('image/png');
+      showShareOverlay(dataUrl);
+    }
+
+    function showShareOverlay(dataUrl) {
+      var existing = document.getElementById('share-overlay');
+      if (existing) existing.remove();
+
+      var overlay = document.createElement('div');
+      overlay.id = 'share-overlay';
+      Object.assign(overlay.style, {
+        position: 'fixed', inset: '0', zIndex: '9999',
+        background: 'rgba(0,0,0,0.85)',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        padding: '24px', overflowY: 'auto',
+        WebkitOverflowScrolling: 'touch'
+      });
+
+      var tip = document.createElement('p');
+      Object.assign(tip.style, {
+        color: '#fff', fontSize: '15px',
+        marginBottom: '16px', textAlign: 'center', flexShrink: '0'
+      });
+      tip.textContent = '长按图片保存到相册';
+
+      var img = document.createElement('img');
+      Object.assign(img.style, {
+        maxWidth: '100%', maxHeight: '75vh',
+        borderRadius: '12px',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.4)'
+      });
+      img.src = dataUrl;
+
+      var closeBtn = document.createElement('button');
+      Object.assign(closeBtn.style, {
+        marginTop: '20px', padding: '10px 32px',
+        border: '1px solid rgba(255,255,255,0.5)', borderRadius: '20px',
+        background: 'transparent', color: '#fff',
+        fontSize: '14px', cursor: 'pointer', flexShrink: '0'
+      });
+      closeBtn.textContent = '关闭';
+      closeBtn.addEventListener('click', function() { overlay.remove(); });
+
+      overlay.appendChild(tip);
+      overlay.appendChild(img);
+      overlay.appendChild(closeBtn);
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.remove();
+      });
+
+      document.body.appendChild(overlay);
     }
 
     document.getElementById('btn-download').addEventListener('click', async function(e) {
