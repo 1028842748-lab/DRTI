@@ -410,6 +410,18 @@ body {
   border-radius: 8px;
 }
 
+.qr-highlight {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.qr-intro {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
 .qr-tagline {
   margin-top: 10px;
   font-size: 0.75rem;

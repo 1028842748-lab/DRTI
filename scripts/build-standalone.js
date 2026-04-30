@@ -110,6 +110,8 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 .qr-promo { margin: 28px 0 8px; text-align: center; }
 .qr-code { width: 120px; height: 120px; border-radius: 8px; }
 .qr-tagline { margin-top: 10px; font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; }
+.qr-highlight { color: var(--accent); font-weight: 700; }
+.qr-intro { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px; }
 .disclaimer { margin-top: 20px; padding: 14px 16px; background: #f5f5f5; border-radius: 8px; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; text-align: center; }
 .result-actions { margin-top: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 @media (max-width: 480px) {
@@ -151,8 +153,9 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
         <div class="axis-bars" id="axis-bars"></div>
         <div class="result-next-step" id="result-next-step"></div>
         <div class="qr-promo">
+          <p class="qr-intro"><strong class="qr-highlight">医渡智循</strong>，专为临床医生、医学研究者打造的医学循证 AI 助手</p>
           <img class="qr-code" src="${qrDataUri}" alt="医渡智循下载二维码" />
-          <p class="qr-tagline">医渡智循，专为临床医生、医学研究者打造的医学循证 AI 助手<br>扫描下载，医生认证即送 6 个月免费 VIP！临床问题随时问，最新文献随意搜，个人知识库轻松管！</p>
+          <p class="qr-tagline"><strong class="qr-highlight">扫描下载，医生认证即送 6 个月免费 VIP！</strong><br>临床问题随时问，最新文献随意搜，个人知识库轻松管！</p>
         </div>
         <div class="disclaimer" id="disclaimer">${config.display.funNote}</div>
         <div class="result-actions">
