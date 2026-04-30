@@ -149,8 +149,8 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
         <div class="axis-bars" id="axis-bars"></div>
         <div class="result-next-step" id="result-next-step"></div>
         <div class="qr-promo">
-          <img class="qr-code" src="${qrDataUri}" alt="医渡质循下载二维码" />
-          <p class="qr-tagline">医渡质循，专为临床医生、医学研究者打造的医学循证 AI 助手<br>扫描下载，医生认证获取免费半年VIP额度</p>
+          <img class="qr-code" src="${qrDataUri}" alt="医渡智循下载二维码" />
+          <p class="qr-tagline">医渡智循，专为临床医生、医学研究者打造的医学循证 AI 助手<br>扫描下载，医生认证即送 6 个月免费 VIP！临床问题随时问，最新文献随意搜，个人知识库轻松管！</p>
         </div>
         <div class="disclaimer" id="disclaimer">${config.display.funNote}</div>
         <div class="result-actions">
@@ -312,13 +312,16 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
       } else {
         descEl.innerHTML = '<p>' + type.description + '</p>';
       }
-      document.getElementById('result-next-step').textContent = type.next_step;
+      document.getElementById('result-next-step').innerHTML = type.next_step.replace(
+        '医渡智循',
+        '<strong style="color:' + primary + ';font-weight:700">医渡智循</strong>'
+      );
 
       var barsEl = document.getElementById('axis-bars');
       barsEl.innerHTML = '';
       AXES.forEach(function(axis) {
         var score = axisScores[axis.key] || 0;
-        var pct = ((score + 10) / 20) * 100;
+        var pct = ((score + 4) / 8) * 100;
         var row = document.createElement('div');
         row.className = 'axis-row';
         row.innerHTML =
