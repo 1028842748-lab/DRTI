@@ -546,12 +546,14 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
       ctx.fillText('本测试仅供娱乐，结果不代表任何专业评估。', W / 2, y + 22);
 
       var dataUrl = canvas.toDataURL('image/png');
-      showShareOverlay(dataUrl);
+      showShareOverlay(dataUrl, type.code);
     }
 
-    function showShareOverlay(dataUrl) {
+    function showShareOverlay(dataUrl, typeCode) {
       var existing = document.getElementById('share-overlay');
       if (existing) existing.remove();
+
+      var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
       var overlay = document.createElement('div');
       overlay.id = 'share-overlay';
@@ -569,29 +571,52 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
         color: '#fff', fontSize: '15px',
         marginBottom: '16px', textAlign: 'center', flexShrink: '0'
       });
-      tip.textContent = '长按图片保存到相册';
+      tip.textContent = isIOS ? '长按图片保存到相册' : '长按图片，或点击下方按钮保存';
 
       var img = document.createElement('img');
       Object.assign(img.style, {
-        maxWidth: '100%', maxHeight: '75vh',
+        maxWidth: '100%', maxHeight: '70vh',
         borderRadius: '12px',
         boxShadow: '0 4px 24px rgba(0,0,0,0.4)'
       });
       img.src = dataUrl;
 
+      var btnRow = document.createElement('div');
+      Object.assign(btnRow.style, {
+        marginTop: '20px', display: 'flex', gap: '12px',
+        flexShrink: '0', flexWrap: 'wrap', justifyContent: 'center'
+      });
+
+      if (!isIOS) {
+        var saveBtn = document.createElement('a');
+        Object.assign(saveBtn.style, {
+          padding: '10px 32px',
+          border: 'none', borderRadius: '20px',
+          background: '#fff', color: '#333',
+          fontSize: '14px', textDecoration: 'none',
+          fontWeight: '600', cursor: 'pointer',
+          display: 'inline-block'
+        });
+        saveBtn.textContent = '下载到本地';
+        saveBtn.href = dataUrl;
+        saveBtn.download = 'DRTI-' + (typeCode || 'result') + '.png';
+        btnRow.appendChild(saveBtn);
+      }
+
       var closeBtn = document.createElement('button');
       Object.assign(closeBtn.style, {
-        marginTop: '20px', padding: '10px 32px',
+        padding: '10px 32px',
         border: '1px solid rgba(255,255,255,0.5)', borderRadius: '20px',
         background: 'transparent', color: '#fff',
-        fontSize: '14px', cursor: 'pointer', flexShrink: '0'
+        fontSize: '14px', cursor: 'pointer'
       });
       closeBtn.textContent = '关闭';
       closeBtn.addEventListener('click', function() { overlay.remove(); });
+      btnRow.appendChild(closeBtn);
 
       overlay.appendChild(tip);
       overlay.appendChild(img);
-      overlay.appendChild(closeBtn);
+      overlay.appendChild(btnRow);
       overlay.addEventListener('click', function(e) {
         if (e.target === overlay) overlay.remove();
       });
