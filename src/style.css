@@ -93,6 +93,13 @@ body {
   opacity: 0.6;
 }
 
+.intro-privacy {
+  margin-top: 8px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
 /* ========== Buttons ========== */
 .btn {
   display: inline-block;
